@@ -70,6 +70,22 @@ function updateContentById(id: string, content: string): Todo {
     })
 }
 
+function deleteById(id: string){
+    const todos = read()
+
+    const todosWithoutOne = todos.filter((todo) => {
+        if(id === todo.id){
+            return false;
+        }
+        return true
+    })
+
+    fs.writeFileSync(DB_FILE_PATH, JSON.stringify({
+        todos: todosWithoutOne,
+    }, null, 2));
+
+}
+
 function CLEAR_DB(){
     fs.writeFileSync(DB_FILE_PATH, "");
 }
@@ -77,11 +93,14 @@ function CLEAR_DB(){
 //SIMULATION
 CLEAR_DB()
 create("Primeira TODO");
-create("Primeira TODO");
-const terceiraTodo = create("Segunda TODO");
+const secondTodo = create("Segunda TODO");
+deleteById(secondTodo.id);
+const thirdTodo = create("Terceira TODO");
 // update(terceiraTodo.id, {
 //     content: "Atualizada!",
 //     done: true 
 // });
-updateContentById(terceiraTodo.id, "Teste!");
-console.log(read());
+updateContentById(thirdTodo.id, "Terceira Atualizada!");
+const todos = read();
+console.log(todos);
+console.log(todos.length);
